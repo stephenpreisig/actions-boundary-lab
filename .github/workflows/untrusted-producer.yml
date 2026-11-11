@@ -1,0 +1,25 @@
+
+name: H018 Untrusted Producer
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  producer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record execution context
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          echo "H018 producer baseline"
+          echo "Event: $EVENT_NAME"
+          echo "Repository: $REPOSITORY"
+          echo "Run ID: $RUN_ID"
+          echo "Declared permission: contents=read"

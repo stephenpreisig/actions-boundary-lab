@@ -1,0 +1,29 @@
+
+name: H018 Privileged Consumer
+
+on:
+  workflow_run:
+    workflows: ["H018 Untrusted Producer"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+jobs:
+  consumer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record execution context
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          UPSTREAM_EVENT: ${{ github.event.workflow_run.event }}
+          UPSTREAM_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        run: |
+          echo "H018 consumer baseline"
+          echo "Event: $EVENT_NAME"
+          echo "Upstream event: $UPSTREAM_EVENT"
+          echo "Upstream run: $UPSTREAM_ID"
+          echo "Upstream conclusion: $UPSTREAM_CONCLUSION"
+          echo "Declared permission: contents=write"
+          echo "No upstream artifacts downloaded or executed"
